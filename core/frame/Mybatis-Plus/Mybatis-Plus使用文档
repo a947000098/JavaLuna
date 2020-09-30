@@ -1,0 +1,217 @@
+# 简介
+
+MyBatis-Plus（简称 MP）是一个 MyBatis 的增强工具，在 MyBatis 的基础上只做增强不做改变，为简化开发、提高效率而生。
+
+## 特点
+
+* 无侵入：只做增强不做改变，引入它不会对现有工程产生影响，如丝般顺滑
+* 损耗小：启动即会自动注入基本 CURD，性能基本无损耗，直接面向对象操作
+* 强大的 CRUD 操作：内置通用 Mapper、通用 Service，仅仅通过少量配置即可实现单表大部分 CRUD 操作，更有强大的条件构造器，满足各类使用需求
+* 支持 Lambda 形式调用：通过 Lambda 表达式，方便的编写各类查询条件，无需再担心字段写错
+* 支持主键自动生成：支持多达 4 种主键策略（内含分布式唯一 ID 生成器 - Sequence），可自由配置，完美解决主键问题
+* 支持 ActiveRecord 模式：支持 ActiveRecord 形式调用，实体类只需继承 Model 类即可进行强大的 CRUD 操作
+* 支持自定义全局通用操作：支持全局通用方法注入（ Write once, use anywhere ）
+* 内置代码生成器：采用代码或者 Maven 插件可快速生成 Mapper 、 Model 、 Service 、 Controller 层代码，支持模板引擎，更有超多自定义配置等您来使用
+* 内置分页插件：基于 MyBatis 物理分页，开发者无需关心具体操作，配置好插件之后，写分页等同于普通 List 查询
+* 分页插件支持多种数据库：支持 MySQL、MariaDB、Oracle、DB2、H2、HSQL、SQLite、Postgre、SQLServer 等多种数据库
+* 内置性能分析插件：可输出 Sql 语句以及其执行时间，建议开发测试时启用该功能，能快速揪出慢查询
+* 内置全局拦截插件：提供全表 delete 、 update 操作智能分析阻断，也可自定义拦截规则，预防误操作
+## 支持数据库
+
+* mysql 、 mariadb 、 oracle 、 db2 、 h2 、 hsql 、 sqlite 、 postgresql 、 sqlserver 、 presto
+* 达梦数据库 、 虚谷数据库 、 人大金仓数据库
+## 框架结构
+
+![图片](https://uploader.shimo.im/f/CTCnQzoRbGRjhgyr.png!thumbnail)
+
+## 学习视频
+
+[慕课网（老猿）入门 ](https://www.imooc.com/learn/1130)
+
+[慕课网（老猿） 进阶 ](https://www.imooc.com/learn/1171)
+
+## 官网地址
+
+[https://mp.baomidou.com/](https://mp.baomidou.com/)
+
+项目地址：[https://github.com/baomidou/mybatis-plus](https://github.com/baomidou/mybatis-plus)
+
+项目文档地址：[https://mp.baomidou.com/guide/](https://mp.baomidou.com/guide/)
+
+项目demo：[https://github.com/baomidou/mybatis-plus-samples](https://github.com/baomidou/mybatis-plus-samples)
+
+# 使用
+## 常用注解
+
+@TableName 注解表名
+
+@TableId 注解主键
+
+@TableFiled 注解字段（非主键）
+
+@Verson 乐观锁用于标记在字段上
+
+@EnumValue 通枚举类注解(注解在枚举字段上)
+
+@TableLogic 逻辑删除
+
+@SqlParser 租户注解,支持method上以及mapper接口上
+
+@KeySequence 序列主键策略 oracle
+
+官方注解地址：[https://mp.baomidou.com/guide/annotation.html#tablename](https://mp.baomidou.com/guide/annotation.html#tablename)
+
+## 如何排除非表字段 三种方式
+
+1.在字段上加上transient防止被序列化
+
+2.在字段上加上static并且提供静态的get/set方法
+
+3.使用@TableFiled注解@TableFiled(exist=false)
+
+CRUD接口使用
+
+[参考官网](https://mp.baomidou.com/guide/crud-interface.html#service-crud-%E6%8E%A5%E5%8F%A3)api
+
+## 实战
+
+1.导入pom.xml文件
+
+```plain
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <!-- 引入srpingboot start父工程 -->
+   <parent>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-parent</artifactId>
+      <version>2.3.1.RELEASE</version>
+      <relativePath/> <!-- lookup parent from repository -->
+   </parent>
+   <groupId>com.mp</groupId>
+   <artifactId>demo</artifactId>
+   <version>0.0.1-SNAPSHOT</version>
+   <name>demo</name>
+   <description>Demo project for Spring Boot</description>
+   <properties>
+      <java.version>1.8</java.version>
+   </properties>
+   <dependencies>
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-web</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>com.baomidou</groupId>
+         <artifactId>mybatis-plus-boot-starter</artifactId>
+         <version>3.3.2</version>
+      </dependency>
+      <dependency>
+         <groupId>com.h2database</groupId>
+         <artifactId>h2</artifactId>
+         <scope>runtime</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-test</artifactId>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.projectlombok</groupId>
+         <artifactId>lombok</artifactId>
+         <optional>true</optional>
+      </dependency>
+   </dependencies>
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+         </plugin>
+      </plugins>
+   </build>
+</project>
+```
+2.application.properties
+
+```plain
+server.port=8080 
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.schema=classpath:db/schema-h2.sql
+spring.datasource.data=classpath:db/data-h2.sql
+spring.datasource.url=jdbc:h2:mem:test
+spring.datasource.username:root
+spring.datasource.password:root
+```
+3.使用内置的h2数据库 放入sql
+```plain
+data-h2.sql
+DELETE FROM user;
+INSERT INTO user (id, name, age, email) VALUES
+(1, 'Jone', 18, 'test1@baomidou.com'),
+(2, 'Jack', 20, 'test2@baomidou.com'),
+(3, 'Tom', 28, 'test3@baomidou.com'),
+(4, 'Sandy', 21, 'test4@baomidou.com'),
+(5, 'Billie', 24, 'test5@baomidou.com');
+DROP TABLE IF EXISTS user;
+schema-h2.sql
+CREATE TABLE user
+(
+ id BIGINT(20) NOT NULL COMMENT '主键ID',
+ name VARCHAR(30) NULL DEFAULT NULL COMMENT '姓名',
+ age INT(11) NULL DEFAULT NULL COMMENT '年龄',
+ email VARCHAR(50) NULL DEFAULT NULL COMMENT '邮箱',
+ PRIMARY KEY (id)
+);
+```
+4.实体类
+```plain
+@Data
+public class User {
+    private Long id;
+    private String name;
+    private Integer age;
+    private String email;
+}
+public interface UserMapper extends BaseMapper<User> {
+}
+@SpringBootApplication
+@ComponentScan({"com.mp"})
+@MapperScan("com.mp.mapper")
+public class DemoApplication extends SpringBootServletInitializer{
+   public static void main(String[] args) throws Exception {
+      Properties properties = new Properties();
+      InputStream in = DemoApplication.class.getClassLoader().getResourceAsStream("application.properties");
+      properties.load(in);
+      SpringApplication app = new SpringApplication(DemoApplication.class);
+      app.setDefaultProperties(properties);
+      app.run(args);
+      System.out.println("启动成功");
+   }
+   @Override
+   protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+      return application.sources(DemoApplication.class);
+   }
+}
+```
+测试类:
+```plain
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = DemoApplication.class)
+public class DemoApplicationTests {
+@Autowired
+private UserMapper userMapper;
+@Test
+public void tesSelect() {
+System.out.println(("----- selectAll method test ------"));
+List<User> userList = userMapper.selectList(null);
+Assert.assertEquals(5, userList.size());
+userList.forEach(System.out::println);
+}
+}
+```
